@@ -27,7 +27,7 @@ server:
   port: ${SERVER_PORT:8080}
 
 jwt:
-  secret: ${JWT_SECRET:replace-with-very-long-secret}
+  secret: ${JWT_SECRET:replace-with-a-very-long-secret-key-at-least-32-characters}
   access-token-expiration-minutes: ${JWT_ACCESS_EXPIRATION_MINUTES:15}
   refresh-token-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:7}
   issuer: ${JWT_ISSUER:glycowatch-backend}
@@ -45,4 +45,3 @@ management:
     web:
       exposure:
         include: health,info
-
