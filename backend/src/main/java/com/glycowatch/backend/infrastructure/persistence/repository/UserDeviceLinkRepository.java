@@ -12,5 +12,6 @@ public interface UserDeviceLinkRepository extends JpaRepository<UserDeviceLinkEn
     Optional<UserDeviceLinkEntity> findByUserIdAndDeviceIdAndActiveTrue(Long userId, Long deviceId);
 
     Optional<UserDeviceLinkEntity> findTopByUserIdAndDeviceIdOrderByLinkedAtDesc(Long userId, Long deviceId);
-}
 
+    Optional<UserDeviceLinkEntity> findTopByDeviceIdAndActiveTrueOrderByLinkedAtDesc(Long deviceId);
+}

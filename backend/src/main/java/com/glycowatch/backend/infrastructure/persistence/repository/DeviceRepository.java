@@ -9,5 +9,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
     boolean existsByUniqueIdentifierIgnoreCase(String uniqueIdentifier);
 
     Optional<DeviceEntity> findByIdAndActiveTrue(Long id);
-}
 
+    Optional<DeviceEntity> findByUniqueIdentifierIgnoreCaseAndActiveTrue(String uniqueIdentifier);
+}
