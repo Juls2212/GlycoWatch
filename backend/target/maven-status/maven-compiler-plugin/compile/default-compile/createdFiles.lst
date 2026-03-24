@@ -8,10 +8,14 @@ com\glycowatch\backend\infrastructure\security\UserPrincipal.class
 com\glycowatch\backend\interfaces\dto\auth\RegisterResponseDto.class
 com\glycowatch\backend\interfaces\dto\auth\UserSummaryDto.class
 com\glycowatch\backend\domain\user\UserEntity.class
+com\glycowatch\backend\application\measurement\MeasurementIngestionServiceImpl.class
+com\glycowatch\backend\interfaces\rest\IotMeasurementController.class
 com\glycowatch\backend\infrastructure\persistence\repository\DeviceRepository.class
 com\glycowatch\backend\infrastructure\security\CustomUserDetailsService.class
 com\glycowatch\backend\interfaces\dto\response\ErrorResponse.class
+com\glycowatch\backend\domain\measurement\GlucoseMeasurementEntity.class
 com\glycowatch\backend\interfaces\dto\auth\LoginRequestDto.class
+com\glycowatch\backend\application\measurement\MeasurementIngestionService.class
 com\glycowatch\backend\interfaces\dto\profile\ProfileResponseDto.class
 com\glycowatch\backend\interfaces\dto\auth\AuthTokensDto.class
 com\glycowatch\backend\interfaces\dto\response\ValidationErrorResponse.class
@@ -23,9 +27,12 @@ com\glycowatch\backend\application\device\DeviceServiceImpl.class
 com\glycowatch\backend\infrastructure\config\OpenApiConfiguration.class
 com\glycowatch\backend\interfaces\dto\response\ValidationErrorResponse$FieldViolation$FieldViolationBuilder.class
 com\glycowatch\backend\interfaces\dto\auth\RefreshTokenRequestDto.class
+com\glycowatch\backend\application\measurement\MeasurementIngestionServiceImpl$ValidationResult.class
 com\glycowatch\backend\domain\user\UserProfileEntity.class
+com\glycowatch\backend\interfaces\dto\measurement\IngestMeasurementRequestDto.class
 com\glycowatch\backend\infrastructure\security\SecurityConfiguration.class
 com\glycowatch\backend\infrastructure\security\JwtAuthenticationFilter.class
+com\glycowatch\backend\interfaces\dto\measurement\IngestMeasurementResponseDto.class
 com\glycowatch\backend\interfaces\dto\response\ValidationErrorResponse$ValidationErrorResponseBuilder.class
 com\glycowatch\backend\interfaces\dto\auth\LoginResponseDto.class
 com\glycowatch\backend\interfaces\dto\device\DeviceResponseDto.class
@@ -34,6 +41,7 @@ com\glycowatch\backend\interfaces\dto\device\CreateDeviceResponseDto.class
 com\glycowatch\backend\application\profile\ProfileServiceImpl.class
 com\glycowatch\backend\domain\user\UserRole.class
 com\glycowatch\backend\domain\device\DeviceStatus.class
+com\glycowatch\backend\domain\measurement\GlucoseMeasurementEntity$GlucoseMeasurementEntityBuilder.class
 com\glycowatch\backend\infrastructure\persistence\repository\UserDeviceLinkRepository.class
 com\glycowatch\backend\interfaces\dto\auth\RegisterRequestDto.class
 com\glycowatch\backend\infrastructure\security\JwtAuthenticationEntryPoint.class
@@ -49,6 +57,7 @@ com\glycowatch\backend\interfaces\dto\response\ValidationErrorResponse$FieldViol
 com\glycowatch\backend\interfaces\dto\profile\UpdateProfileRequestDto.class
 com\glycowatch\backend\interfaces\rest\ProfileController.class
 com\glycowatch\backend\interfaces\dto\device\LinkDeviceResponseDto.class
+com\glycowatch\backend\infrastructure\persistence\repository\GlucoseMeasurementRepository.class
 com\glycowatch\backend\infrastructure\security\JwtTokenProvider.class
 com\glycowatch\backend\domain\user\UserProfileEntity$UserProfileEntityBuilder.class
 com\glycowatch\backend\GlycoWatchBackendApplication.class
