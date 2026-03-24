@@ -10,5 +10,6 @@ public interface AlertRepository extends JpaRepository<AlertEntity, Long> {
     List<AlertEntity> findByUserIdOrderByCreatedAtDesc(Long userId);
 
     Optional<AlertEntity> findByIdAndUserId(Long id, Long userId);
-}
 
+    long countByUserId(Long userId);
+}

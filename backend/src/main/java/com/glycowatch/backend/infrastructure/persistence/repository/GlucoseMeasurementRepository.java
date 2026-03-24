@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface GlucoseMeasurementRepository extends JpaRepository<GlucoseMeasurementEntity, Long> {
 
@@ -33,4 +35,13 @@ public interface GlucoseMeasurementRepository extends JpaRepository<GlucoseMeasu
     );
 
     Optional<GlucoseMeasurementEntity> findFirstByUserIdAndIsValidTrueOrderByMeasuredAtDesc(Long userId);
+
+    @Query("""
+            SELECT AVG(m.glucoseValue), MIN(m.glucoseValue), MAX(m.glucoseValue)
+            FROM GlucoseMeasurementEntity m
+            WHERE m.user.id = :userId
+              AND m.isValid = true
+              AND m.measuredAt >= :since
+            """)
+    Object[] getRecentStats(@Param("userId") Long userId, @Param("since") Instant since);
 }

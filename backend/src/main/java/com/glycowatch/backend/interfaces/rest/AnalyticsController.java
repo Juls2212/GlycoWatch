@@ -1,0 +1,43 @@
+package com.glycowatch.backend.interfaces.rest;
+
+import com.glycowatch.backend.application.analytics.DashboardService;
+import com.glycowatch.backend.interfaces.dto.analytics.DashboardResponseDto;
+import com.glycowatch.backend.interfaces.dto.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import java.time.Instant;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/analytics")
+@RequiredArgsConstructor
+@Tag(name = "Analytics", description = "Simple analytics endpoints")
+public class AnalyticsController {
+
+    private final DashboardService dashboardService;
+
+    @GetMapping("/dashboard")
+    @Operation(summary = "Get simple dashboard analytics")
+    public ResponseEntity<ApiResponse<DashboardResponseDto>> getDashboard(
+            Authentication authentication,
+            HttpServletRequest httpRequest
+    ) {
+        DashboardResponseDto data = dashboardService.getDashboard(authentication.getName());
+        return ResponseEntity.ok(
+                ApiResponse.<DashboardResponseDto>builder()
+                        .success(true)
+                        .message("Dashboard retrieved successfully.")
+                        .data(data)
+                        .timestamp(Instant.now())
+                        .path(httpRequest.getRequestURI())
+                        .build()
+        );
+    }
+}
+
