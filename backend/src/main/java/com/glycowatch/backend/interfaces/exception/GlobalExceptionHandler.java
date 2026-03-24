@@ -2,6 +2,7 @@ package com.glycowatch.backend.interfaces.exception;
 
 import com.glycowatch.backend.interfaces.dto.response.ErrorResponse;
 import com.glycowatch.backend.interfaces.dto.response.ValidationErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -62,6 +63,22 @@ public class GlobalExceptionHandler {
                 .success(false)
                 .error("MALFORMED_REQUEST")
                 .message("Malformed JSON request.")
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(
+            ConstraintViolationException ex,
+            HttpServletRequest request
+    ) {
+        ErrorResponse response = ErrorResponse.builder()
+                .success(false)
+                .error("VALIDATION_ERROR")
+                .message(ex.getMessage())
                 .timestamp(Instant.now())
                 .path(request.getRequestURI())
                 .build();
