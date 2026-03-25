@@ -313,6 +313,59 @@ a {
   gap: 14px;
 }
 
+.devices-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 14px;
+}
+
+.devices-form {
+  display: grid;
+  gap: 12px;
+}
+
+.devices-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.device-created-card {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(20, 33, 58, 0.6);
+  display: grid;
+  gap: 6px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 12px;
+}
+
+.status-pill.status-active {
+  color: #b7eecf;
+  background: rgba(73, 194, 126, 0.12);
+  border-color: rgba(73, 194, 126, 0.35);
+}
+
+.status-pill.status-disabled {
+  color: #ffb8c8;
+  background: rgba(255, 111, 141, 0.15);
+  border-color: rgba(255, 111, 141, 0.35);
+}
+
+.status-pill.status-registered {
+  color: #b7d7ff;
+  background: rgba(77, 163, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.35);
+}
+
 .filters-card {
   display: flex;
   flex-direction: column;
@@ -545,6 +598,10 @@ a {
   }
 
   .measurements-top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .devices-grid {
     grid-template-columns: 1fr;
   }
 
