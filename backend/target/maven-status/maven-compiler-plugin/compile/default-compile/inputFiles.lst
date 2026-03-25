@@ -39,6 +39,7 @@ C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\infrastructure\security\TokenType.java
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\infrastructure\security\UserPrincipal.java
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\interfaces\dto\alert\AlertResponseDto.java
+C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\interfaces\dto\analytics\ChartPointDto.java
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\interfaces\dto\analytics\DashboardResponseDto.java
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\interfaces\dto\auth\AuthTokensDto.java
 C:\Users\ASUS\Desktop\4 semestre\ProyectoFinal PS ES\GlyCowatch\backend\src\main\java\com\glycowatch\backend\interfaces\dto\auth\LoginRequestDto.java

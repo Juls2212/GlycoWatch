@@ -1,12 +1,14 @@
 package com.glycowatch.backend.interfaces.rest;
 
 import com.glycowatch.backend.application.analytics.DashboardService;
+import com.glycowatch.backend.interfaces.dto.analytics.ChartPointDto;
 import com.glycowatch.backend.interfaces.dto.analytics.DashboardResponseDto;
 import com.glycowatch.backend.interfaces.dto.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,5 +41,22 @@ public class AnalyticsController {
                         .build()
         );
     }
-}
 
+    @GetMapping("/chart")
+    @Operation(summary = "Get chart-ready glucose points")
+    public ResponseEntity<ApiResponse<List<ChartPointDto>>> getChartData(
+            Authentication authentication,
+            HttpServletRequest httpRequest
+    ) {
+        List<ChartPointDto> data = dashboardService.getChartData(authentication.getName());
+        return ResponseEntity.ok(
+                ApiResponse.<List<ChartPointDto>>builder()
+                        .success(true)
+                        .message("Chart data retrieved successfully.")
+                        .data(data)
+                        .timestamp(Instant.now())
+                        .path(httpRequest.getRequestURI())
+                        .build()
+        );
+    }
+}

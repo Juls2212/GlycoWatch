@@ -5,12 +5,17 @@ import com.glycowatch.backend.domain.user.UserEntity;
 import com.glycowatch.backend.infrastructure.persistence.repository.AlertRepository;
 import com.glycowatch.backend.infrastructure.persistence.repository.GlucoseMeasurementRepository;
 import com.glycowatch.backend.infrastructure.persistence.repository.UserRepository;
+import com.glycowatch.backend.interfaces.dto.analytics.ChartPointDto;
 import com.glycowatch.backend.interfaces.dto.analytics.DashboardResponseDto;
 import com.glycowatch.backend.interfaces.exception.ApiException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +75,20 @@ public class DashboardServiceImpl implements DashboardService {
                 );
 
         return new DashboardResponseDto(latestDto, average, min, max, alertsCount);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ChartPointDto> getChartData(String authenticatedEmail) {
+        UserEntity user = resolveActiveUser(authenticatedEmail);
+
+        return glucoseMeasurementRepository.findByUserIdAndIsValidTrue(
+                        user.getId(),
+                        PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "measuredAt"))
+                ).getContent().stream()
+                .map(measurement -> new ChartPointDto(measurement.getMeasuredAt(), measurement.getGlucoseValue()))
+                .sorted(Comparator.comparing(ChartPointDto::measuredAt))
+                .toList();
     }
 
     private UserEntity resolveActiveUser(String authenticatedEmail) {
