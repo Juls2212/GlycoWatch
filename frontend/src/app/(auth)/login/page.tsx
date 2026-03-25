@@ -5,6 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLoginForm } from "@/features/auth/use-login-form";
 import { useAuthStore } from "@/stores/auth-store";
+import { onboardingStorage } from "@/lib/auth/onboarding";
+
+function resolvePostLoginPath(): string {
+  return onboardingStorage.isProfilePending() ? "/profile" : "/dashboard";
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,13 +27,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isHydrated && accessToken) {
-      router.replace("/dashboard");
+      router.replace(resolvePostLoginPath());
     }
   }, [isHydrated, accessToken, router]);
 
   const onSubmit = handleSubmit(async (values) => {
     await login(values);
-    router.replace("/dashboard");
+    router.replace(resolvePostLoginPath());
   });
 
   return (
@@ -68,3 +73,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

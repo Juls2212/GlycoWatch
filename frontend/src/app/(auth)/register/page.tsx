@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerRequest } from "@/features/auth/api";
 import { useRegisterForm } from "@/features/auth/use-register-form";
+import { onboardingStorage } from "@/lib/auth/onboarding";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -24,7 +25,8 @@ export default function RegisterPage() {
     setSuccess(null);
     try {
       await registerRequest(values);
-      setSuccess("Cuenta creada correctamente. Ahora puedes iniciar sesión.");
+      onboardingStorage.markProfilePending();
+      setSuccess("Cuenta creada correctamente. Inicia sesión para completar tu perfil.");
       setTimeout(() => router.replace("/login"), 900);
     } catch (err) {
       const message = err instanceof Error ? err.message : "No se pudo crear la cuenta.";

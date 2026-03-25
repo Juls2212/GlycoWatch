@@ -7,6 +7,31 @@ type Props = {
   data: ChartPoint[];
 };
 
+const axisDateFormatter = new Intl.DateTimeFormat("es-CO", {
+  day: "2-digit",
+  month: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit"
+});
+
+const tooltipDateFormatter = new Intl.DateTimeFormat("es-CO", {
+  weekday: "short",
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit"
+});
+
+function formatAxisLabel(value: string): string {
+  return axisDateFormatter.format(new Date(value));
+}
+
+function formatTooltipLabel(value: string): string {
+  return tooltipDateFormatter.format(new Date(value));
+}
+
 export function GlucoseChart({ data }: Props) {
   return (
     <div className="chart-wrap">
@@ -15,7 +40,9 @@ export function GlucoseChart({ data }: Props) {
           <CartesianGrid stroke="#1a2540" strokeDasharray="4 4" />
           <XAxis
             dataKey="measuredAt"
-            tickFormatter={(value) => new Date(value).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}
+            tickFormatter={formatAxisLabel}
+            interval="preserveStartEnd"
+            minTickGap={36}
             tick={{ fill: "#8fa7d5", fontSize: 12 }}
             axisLine={false}
             tickLine={false}
@@ -28,7 +55,7 @@ export function GlucoseChart({ data }: Props) {
               borderRadius: "12px",
               color: "#dce8ff"
             }}
-            labelFormatter={(value) => new Date(value).toLocaleString("es-CO")}
+            labelFormatter={(value) => formatTooltipLabel(String(value))}
             formatter={(value: number) => [`${value} mg/dL`, "Glucosa"]}
           />
           <Line

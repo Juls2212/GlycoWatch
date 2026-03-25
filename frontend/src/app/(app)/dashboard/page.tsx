@@ -13,6 +13,41 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { GlucoseChart } from "@/components/charts/glucose-chart";
 
+function formatMetric(value: number): string {
+  return value.toLocaleString("es-CO", { maximumFractionDigits: 1 });
+}
+
+function translateStatus(status: RiskAnalysis["currentStatus"]): string {
+  if (status === "LOW") return "BAJO";
+  if (status === "HIGH") return "ALTO";
+  return "EN RANGO";
+}
+
+function translateRiskLevel(level: RiskAnalysis["riskLevel"]): string {
+  if (level === "HIGH") return "ALTO";
+  if (level === "MEDIUM") return "MEDIO";
+  return "BAJO";
+}
+
+function translateTrend(trend: RiskAnalysis["trend"]): string {
+  if (trend === "RISING") return "ASCENDENTE";
+  if (trend === "FALLING") return "DESCENDENTE";
+  return "ESTABLE";
+}
+
+function buildSpanishRiskMessage(risk: RiskAnalysis): string {
+  const statusPrefix =
+    risk.currentStatus === "LOW"
+      ? "Tus valores recientes están por debajo del rango objetivo."
+      : risk.currentStatus === "HIGH"
+        ? "Tus valores recientes están por encima del rango objetivo."
+        : "Tus valores recientes se mantienen dentro del rango objetivo.";
+
+  const trendText = `Tendencia ${translateTrend(risk.trend).toLowerCase()}.`;
+  const levelText = `Nivel de riesgo ${translateRiskLevel(risk.riskLevel).toLowerCase()}.`;
+  return `${statusPrefix} ${trendText} ${levelText}`;
+}
+
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [chartData, setChartData] = useState<ChartPoint[]>([]);
@@ -101,6 +136,11 @@ export default function DashboardPage() {
     return date.toLocaleString("es-CO");
   }, [metrics?.latestMeasurement]);
 
+  const riskMessage = useMemo(() => {
+    if (!risk) return "Sin análisis disponible por el momento.";
+    return buildSpanishRiskMessage(risk);
+  }, [risk]);
+
   return (
     <div className="dashboard-grid">
       <Section title="Resumen clínico" subtitle="Indicadores recientes para seguimiento inmediato">
@@ -109,26 +149,28 @@ export default function DashboardPage() {
           <Card>
             <p className="metric-label">Última medición</p>
             <p className="metric-value">
-              {metrics?.latestMeasurement ? `${metrics.latestMeasurement.glucoseValue} ${metrics.latestMeasurement.unit}` : "--"}
+              {metrics?.latestMeasurement ? `${formatMetric(metrics.latestMeasurement.glucoseValue)} ${metrics.latestMeasurement.unit}` : "--"}
             </p>
             <p className="metric-meta">{formattedLatest}</p>
           </Card>
 
           <Card>
             <p className="metric-label">Promedio reciente</p>
-            <p className="metric-value">{metrics?.averageGlucose ?? 0} mg/dL</p>
+            <p className="metric-value">{formatMetric(metrics?.averageGlucose ?? 0)} mg/dL</p>
             <p className="metric-meta">Ventana reciente</p>
           </Card>
 
           <Card>
             <p className="metric-label">Mínimo / Máximo</p>
-            <p className="metric-value">{metrics?.minGlucose ?? 0} / {metrics?.maxGlucose ?? 0}</p>
+            <p className="metric-value">
+              {formatMetric(metrics?.minGlucose ?? 0)} / {formatMetric(metrics?.maxGlucose ?? 0)}
+            </p>
             <p className="metric-meta">Valores recientes</p>
           </Card>
 
           <Card>
             <p className="metric-label">Total de alertas</p>
-            <p className="metric-value">{metrics?.alertsCount ?? 0}</p>
+            <p className="metric-value">{formatMetric(metrics?.alertsCount ?? 0)}</p>
             <p className="metric-meta">Eventos registrados</p>
           </Card>
         </div>
@@ -152,19 +194,19 @@ export default function DashboardPage() {
         <Card>
           <div className="risk-grid">
             <div>
-              <p className="metric-label">Estado</p>
-              <p className="metric-value">{risk?.currentStatus ?? "IN_RANGE"}</p>
+              <p className="metric-label">Estado actual</p>
+              <p className="metric-value">{risk ? translateStatus(risk.currentStatus) : "EN RANGO"}</p>
             </div>
             <div>
               <p className="metric-label">Nivel de riesgo</p>
-              <p className="metric-value">{risk?.riskLevel ?? "LOW"}</p>
+              <p className="metric-value">{risk ? translateRiskLevel(risk.riskLevel) : "BAJO"}</p>
             </div>
             <div>
               <p className="metric-label">Tendencia</p>
-              <p className="metric-value">{risk?.trend ?? "STABLE"}</p>
+              <p className="metric-value">{risk ? translateTrend(risk.trend) : "ESTABLE"}</p>
             </div>
           </div>
-          <p className="risk-message">{risk?.message ?? "Sin análisis disponible por el momento."}</p>
+          <p className="risk-message">{riskMessage}</p>
         </Card>
       </Section>
 
@@ -233,3 +275,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

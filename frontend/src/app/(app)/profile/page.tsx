@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Section } from "@/components/ui/section";
 import { fetchProfile, updateProfile } from "@/features/profile/api";
 import { ProfileForm } from "@/features/profile/components/profile-form";
 import { ProfileData, UpdateProfilePayload } from "@/features/profile/types";
+import { onboardingStorage } from "@/lib/auth/onboarding";
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,6 +51,13 @@ export default function ProfilePage() {
     try {
       const updated = await updateProfile(payload);
       setProfile(updated);
+      const wasPendingOnboarding = onboardingStorage.isProfilePending();
+      if (wasPendingOnboarding) {
+        onboardingStorage.clearProfilePending();
+        setSuccess("Perfil inicial guardado correctamente.");
+        router.replace("/dashboard");
+        return;
+      }
       setSuccess("Perfil actualizado correctamente.");
     } catch (err) {
       const message = err instanceof Error ? err.message : "No se pudo actualizar el perfil.";
@@ -72,4 +82,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
