@@ -4,6 +4,8 @@ import com.glycowatch.backend.domain.device.DeviceEntity;
 import com.glycowatch.backend.domain.user.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,8 +38,8 @@ public class GlucoseMeasurementEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "device_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "device_id", nullable = true)
     private DeviceEntity device;
 
     @Column(name = "glucose_value", nullable = false, precision = 10, scale = 2)
@@ -61,10 +63,13 @@ public class GlucoseMeasurementEntity {
     @Column(name = "deduplication_hash", nullable = false, unique = true, length = 128)
     private String deduplicationHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "origin", nullable = false, length = 20)
+    private MeasurementOrigin origin;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "created_by", nullable = false, length = 255)
     private String createdBy;
 }
-

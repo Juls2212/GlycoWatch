@@ -98,8 +98,7 @@ public class MeasurementQueryServiceImpl implements MeasurementQueryService {
                 entity.getMeasuredAt(),
                 Boolean.TRUE.equals(entity.getIsValid()),
                 entity.getInvalidReason(),
-                entity.getDevice().getId()
+                entity.getDevice() != null ? entity.getDevice().getId() : null
         );
     }
 }
-

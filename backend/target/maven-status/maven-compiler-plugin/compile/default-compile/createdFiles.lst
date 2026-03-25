@@ -62,7 +62,6 @@ com\glycowatch\backend\interfaces\dto\response\ValidationErrorResponse$FieldViol
 com\glycowatch\backend\interfaces\dto\measurement\LatestMeasurementResponseDto.class
 com\glycowatch\backend\interfaces\rest\MeasurementController.class
 com\glycowatch\backend\interfaces\dto\auth\RefreshTokenRequestDto.class
-com\glycowatch\backend\application\measurement\MeasurementIngestionServiceImpl$ValidationResult.class
 com\glycowatch\backend\domain\user\UserProfileEntity.class
 com\glycowatch\backend\interfaces\dto\measurement\IngestMeasurementRequestDto.class
 com\glycowatch\backend\interfaces\dto\measurement\IngestMeasurementResponseDto.class

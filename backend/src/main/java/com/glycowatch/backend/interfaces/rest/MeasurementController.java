@@ -1,12 +1,16 @@
 package com.glycowatch.backend.interfaces.rest;
 
 import com.glycowatch.backend.application.measurement.MeasurementQueryService;
+import com.glycowatch.backend.application.measurement.MeasurementManualService;
+import com.glycowatch.backend.interfaces.dto.measurement.IngestMeasurementResponseDto;
 import com.glycowatch.backend.interfaces.dto.measurement.LatestMeasurementResponseDto;
+import com.glycowatch.backend.interfaces.dto.measurement.ManualMeasurementRequestDto;
 import com.glycowatch.backend.interfaces.dto.measurement.MeasurementPageResponseDto;
 import com.glycowatch.backend.interfaces.dto.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.Instant;
@@ -17,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MeasurementController {
 
     private final MeasurementQueryService measurementQueryService;
+    private final MeasurementManualService measurementManualService;
 
     @GetMapping
     @Operation(summary = "List measurements with pagination and optional date range")
@@ -69,5 +76,23 @@ public class MeasurementController {
                         .build()
         );
     }
-}
 
+    @PostMapping("/manual")
+    @Operation(summary = "Create manual glucose measurement for authenticated user")
+    public ResponseEntity<ApiResponse<IngestMeasurementResponseDto>> createManualMeasurement(
+            Authentication authentication,
+            @Valid @RequestBody ManualMeasurementRequestDto request,
+            HttpServletRequest httpRequest
+    ) {
+        IngestMeasurementResponseDto data = measurementManualService.createManualMeasurement(authentication.getName(), request);
+        return ResponseEntity.ok(
+                ApiResponse.<IngestMeasurementResponseDto>builder()
+                        .success(true)
+                        .message("Manual measurement created successfully.")
+                        .data(data)
+                        .timestamp(Instant.now())
+                        .path(httpRequest.getRequestURI())
+                        .build()
+        );
+    }
+}
