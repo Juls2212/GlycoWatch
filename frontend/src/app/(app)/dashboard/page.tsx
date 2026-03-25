@@ -12,40 +12,17 @@ import { AlertItem, ChartPoint, DashboardMetrics, RiskAnalysis } from "@/feature
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { GlucoseChart } from "@/components/charts/glucose-chart";
+import { ChartRangeFilter } from "@/features/dashboard/components/chart-range-filter";
+import { ChartRange, filterChartByRange } from "@/features/dashboard/chart-range";
+import {
+  buildSpanishRiskMessage,
+  translateRiskLevel,
+  translateStatus,
+  translateTrend
+} from "@/features/dashboard/risk-text";
 
 function formatMetric(value: number): string {
   return value.toLocaleString("es-CO", { maximumFractionDigits: 1 });
-}
-
-function translateStatus(status: RiskAnalysis["currentStatus"]): string {
-  if (status === "LOW") return "BAJO";
-  if (status === "HIGH") return "ALTO";
-  return "EN RANGO";
-}
-
-function translateRiskLevel(level: RiskAnalysis["riskLevel"]): string {
-  if (level === "HIGH") return "ALTO";
-  if (level === "MEDIUM") return "MEDIO";
-  return "BAJO";
-}
-
-function translateTrend(trend: RiskAnalysis["trend"]): string {
-  if (trend === "RISING") return "ASCENDENTE";
-  if (trend === "FALLING") return "DESCENDENTE";
-  return "ESTABLE";
-}
-
-function buildSpanishRiskMessage(risk: RiskAnalysis): string {
-  const statusPrefix =
-    risk.currentStatus === "LOW"
-      ? "Tus valores recientes están por debajo del rango objetivo."
-      : risk.currentStatus === "HIGH"
-        ? "Tus valores recientes están por encima del rango objetivo."
-        : "Tus valores recientes se mantienen dentro del rango objetivo.";
-
-  const trendText = `Tendencia ${translateTrend(risk.trend).toLowerCase()}.`;
-  const levelText = `Nivel de riesgo ${translateRiskLevel(risk.riskLevel).toLowerCase()}.`;
-  return `${statusPrefix} ${trendText} ${levelText}`;
 }
 
 export default function DashboardPage() {
@@ -60,6 +37,7 @@ export default function DashboardPage() {
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [glucoseValueInput, setGlucoseValueInput] = useState("");
   const [measuredAtInput, setMeasuredAtInput] = useState("");
+  const [chartRange, setChartRange] = useState<ChartRange>("WEEK");
 
   const loadDashboardData = async (mountedRef?: { current: boolean }) => {
     setError(null);
@@ -141,6 +119,8 @@ export default function DashboardPage() {
     return buildSpanishRiskMessage(risk);
   }, [risk]);
 
+  const filteredChartData = useMemo(() => filterChartByRange(chartData, chartRange), [chartData, chartRange]);
+
   return (
     <div className="dashboard-grid">
       <Section title="Resumen clínico" subtitle="Indicadores recientes para seguimiento inmediato">
@@ -179,13 +159,18 @@ export default function DashboardPage() {
       <Section
         title="Tendencia glucémica"
         subtitle="Últimas mediciones válidas para visualización rápida"
-        action={isLoading ? <span className="soft-text">Cargando...</span> : undefined}
+        action={
+          <div className="section-actions">
+            <ChartRangeFilter value={chartRange} onChange={setChartRange} />
+            {isLoading ? <span className="soft-text">Cargando...</span> : null}
+          </div>
+        }
       >
         <Card>
-          {chartData.length > 0 ? (
-            <GlucoseChart data={chartData} />
+          {filteredChartData.length > 0 ? (
+            <GlucoseChart data={filteredChartData} />
           ) : (
-            <p className="soft-text">No hay datos suficientes para mostrar la gráfica.</p>
+            <p className="soft-text">No hay datos en el rango seleccionado.</p>
           )}
         </Card>
       </Section>
@@ -275,4 +260,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

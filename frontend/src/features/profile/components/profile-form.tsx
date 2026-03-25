@@ -1,6 +1,7 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { ProfileData, UpdateProfilePayload } from "@/features/profile/types";
+import { formatTimezoneLabel, getBrowserTimezoneOrDefault, getTimezoneOptions } from "@/lib/timezones";
 
 type Props = {
   profile: ProfileData | null;
@@ -55,10 +56,15 @@ function parseOptionalNumber(value: string): number | null {
 export function ProfileForm({ profile, isLoading, isSubmitting, error, success, onSubmit }: Props) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const timezoneOptions = useMemo(() => getTimezoneOptions(), []);
 
   useEffect(() => {
     if (profile) {
-      setForm(toFormState(profile));
+      const mapped = toFormState(profile);
+      if (!mapped.timezone) {
+        mapped.timezone = getBrowserTimezoneOrDefault();
+      }
+      setForm(mapped);
     }
   }, [profile]);
 
@@ -128,7 +134,17 @@ export function ProfileForm({ profile, isLoading, isSubmitting, error, success, 
 
           <label className="field">
             <span>Zona horaria</span>
-            <input type="text" value={form.timezone} onChange={(event) => setField("timezone")(event.target.value)} />
+            <select value={form.timezone} onChange={(event) => setField("timezone")(event.target.value)}>
+              <option value="">Selecciona una zona horaria</option>
+              {!timezoneOptions.includes(form.timezone) && form.timezone ? (
+                <option value={form.timezone}>{formatTimezoneLabel(form.timezone)}</option>
+              ) : null}
+              {timezoneOptions.map((timezone) => (
+                <option key={timezone} value={timezone}>
+                  {formatTimezoneLabel(timezone)}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="field">
@@ -177,4 +193,3 @@ export function ProfileForm({ profile, isLoading, isSubmitting, error, success, 
     </Card>
   );
 }
-

@@ -221,6 +221,12 @@ a {
   font-size: 13px;
 }
 
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .card {
   background: linear-gradient(165deg, var(--bg-card) 0%, var(--bg-card-strong) 100%);
   border: 1px solid var(--border);
@@ -270,6 +276,12 @@ a {
 .risk-message {
   margin: 0;
   color: var(--text-soft);
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .alerts-list {
@@ -454,6 +466,34 @@ a {
   gap: 8px;
 }
 
+.range-filter {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.range-pill {
+  border: 1px solid var(--border);
+  background: #111a2d;
+  color: var(--text-soft);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.range-pill:hover {
+  color: var(--text);
+  border-color: rgba(77, 163, 255, 0.35);
+}
+
+.range-pill.active {
+  color: #e8f2ff;
+  background: rgba(77, 163, 255, 0.16);
+  border-color: rgba(77, 163, 255, 0.45);
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -548,7 +588,17 @@ a {
   font-size: 14px;
 }
 
-.field input:focus {
+.field select {
+  border: 1px solid var(--border);
+  background: #0b1220;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.field input:focus,
+.field select:focus {
   outline: 1px solid var(--accent-soft);
 }
 
@@ -677,6 +727,10 @@ a {
   }
 
   .risk-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-grid {
     grid-template-columns: 1fr;
   }
 
