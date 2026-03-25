@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   { href: "/dashboard", label: "Panel" },
-  { href: "/dashboard", label: "Métricas" },
+  { href: "/measurements", label: "Mediciones" },
   { href: "/dashboard", label: "Alertas" }
 ];
 
@@ -35,4 +35,3 @@ export function Sidebar() {
     </aside>
   );
 }
-
