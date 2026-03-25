@@ -10,7 +10,8 @@ public record ProfileResponseDto(
         LocalDate birthDate,
         BigDecimal hypoglycemiaThreshold,
         BigDecimal hyperglycemiaThreshold,
-        String timezone
+        String timezone,
+        BigDecimal weightKg,
+        BigDecimal heightCm
 ) {
 }
-

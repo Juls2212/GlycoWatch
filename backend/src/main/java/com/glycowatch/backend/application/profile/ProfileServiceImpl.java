@@ -42,6 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setHypoglycemiaThreshold(request.hypoglycemiaThreshold());
         profile.setHyperglycemiaThreshold(request.hyperglycemiaThreshold());
         profile.setTimezone(trimToNull(request.timezone()));
+        profile.setWeightKg(request.weightKg());
+        profile.setHeightCm(request.heightCm());
         profile.setUpdatedAt(Instant.now());
         profile.setUpdatedBy(user.getEmail());
 
@@ -63,7 +65,9 @@ public class ProfileServiceImpl implements ProfileService {
                 profile.getBirthDate(),
                 profile.getHypoglycemiaThreshold(),
                 profile.getHyperglycemiaThreshold(),
-                profile.getTimezone()
+                profile.getTimezone(),
+                profile.getWeightKg(),
+                profile.getHeightCm()
         );
     }
 
@@ -75,4 +79,3 @@ public class ProfileServiceImpl implements ProfileService {
         return trimmed.isEmpty() ? null : trimmed;
     }
 }
-

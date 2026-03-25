@@ -27,7 +27,14 @@ public record UpdateProfileRequestDto(
         BigDecimal hyperglycemiaThreshold,
 
         @Size(min = 1, max = 100, message = "Timezone must contain between 1 and 100 characters.")
-        String timezone
+        String timezone,
+
+        @DecimalMin(value = "1.00", message = "Weight must be >= 1 kg.")
+        @DecimalMax(value = "500.00", message = "Weight must be <= 500 kg.")
+        BigDecimal weightKg,
+
+        @DecimalMin(value = "30.00", message = "Height must be >= 30 cm.")
+        @DecimalMax(value = "300.00", message = "Height must be <= 300 cm.")
+        BigDecimal heightCm
 ) {
 }
-

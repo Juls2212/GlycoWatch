@@ -50,6 +50,12 @@ public class UserProfileEntity {
     @Column(length = 100)
     private String timezone;
 
+    @Column(name = "weight_kg", precision = 6, scale = 2)
+    private BigDecimal weightKg;
+
+    @Column(name = "height_cm", precision = 6, scale = 2)
+    private BigDecimal heightCm;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -62,4 +68,3 @@ public class UserProfileEntity {
     @Column(name = "updated_by", length = 255)
     private String updatedBy;
 }
-
