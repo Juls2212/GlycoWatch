@@ -441,6 +441,18 @@ a {
   gap: 14px;
 }
 
+.insights-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.insight-item {
+  color: var(--text);
+  line-height: 1.45;
+}
+
 .alerts-list {
   list-style: none;
   margin: 0;
@@ -492,6 +504,32 @@ a {
 
 .alerts-list-full .alert-message {
   margin-bottom: 6px;
+}
+
+.alerts-groups {
+  display: grid;
+  gap: 14px;
+}
+
+.alerts-group {
+  display: grid;
+  gap: 10px;
+}
+
+.alerts-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.alerts-group-title {
+  margin: 0;
+  font-size: 15px;
+}
+
+.alerts-filter {
+  margin: 2px 0 2px;
 }
 
 .alerts-actions {
@@ -1022,6 +1060,11 @@ a {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2px;
+  }
+
+  .alerts-group-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .chart-wrap {

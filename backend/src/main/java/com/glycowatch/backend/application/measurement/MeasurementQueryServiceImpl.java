@@ -2,6 +2,7 @@ package com.glycowatch.backend.application.measurement;
 
 import com.glycowatch.backend.domain.measurement.GlucoseMeasurementEntity;
 import com.glycowatch.backend.domain.user.UserEntity;
+import com.glycowatch.backend.infrastructure.persistence.repository.AlertRepository;
 import com.glycowatch.backend.infrastructure.persistence.repository.GlucoseMeasurementRepository;
 import com.glycowatch.backend.infrastructure.persistence.repository.UserRepository;
 import com.glycowatch.backend.interfaces.dto.measurement.LatestMeasurementResponseDto;
@@ -26,6 +27,7 @@ public class MeasurementQueryServiceImpl implements MeasurementQueryService {
 
     private final UserRepository userRepository;
     private final GlucoseMeasurementRepository glucoseMeasurementRepository;
+    private final AlertRepository alertRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -64,6 +66,18 @@ public class MeasurementQueryServiceImpl implements MeasurementQueryService {
                 measurement.getUnit(),
                 measurement.getMeasuredAt()
         );
+    }
+
+    @Override
+    @Transactional
+    public void deleteMeasurement(String authenticatedEmail, Long measurementId) {
+        UserEntity user = resolveActiveUser(authenticatedEmail);
+
+        GlucoseMeasurementEntity measurement = glucoseMeasurementRepository.findByIdAndUserId(measurementId, user.getId())
+                .orElseThrow(() -> new ApiException("MEASUREMENT_NOT_FOUND", "Measurement was not found.", HttpStatus.NOT_FOUND));
+
+        alertRepository.deleteByMeasurementId(measurement.getId());
+        glucoseMeasurementRepository.delete(measurement);
     }
 
     private Page<GlucoseMeasurementEntity> queryMeasurements(Long userId, LocalDate from, LocalDate to, Pageable pageable) {

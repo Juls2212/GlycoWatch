@@ -15,4 +15,6 @@ public interface AlertRepository extends JpaRepository<AlertEntity, Long> {
     long countByUserId(Long userId);
 
     long countByUserIdAndCreatedAtGreaterThanEqual(Long userId, Instant since);
+
+    long deleteByMeasurementId(Long measurementId);
 }

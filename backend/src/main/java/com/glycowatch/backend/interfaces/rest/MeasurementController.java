@@ -20,7 +20,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,6 +92,25 @@ public class MeasurementController {
                         .success(true)
                         .message("Manual measurement created successfully.")
                         .data(data)
+                        .timestamp(Instant.now())
+                        .path(httpRequest.getRequestURI())
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete measurement for authenticated user")
+    public ResponseEntity<ApiResponse<Void>> deleteMeasurement(
+            Authentication authentication,
+            @PathVariable Long id,
+            HttpServletRequest httpRequest
+    ) {
+        measurementQueryService.deleteMeasurement(authentication.getName(), id);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .message("Measurement deleted successfully.")
+                        .data(null)
                         .timestamp(Instant.now())
                         .path(httpRequest.getRequestURI())
                         .build()

@@ -15,5 +15,6 @@ public interface MeasurementQueryService {
     );
 
     LatestMeasurementResponseDto getLatestMeasurement(String authenticatedEmail);
-}
 
+    void deleteMeasurement(String authenticatedEmail, Long measurementId);
+}

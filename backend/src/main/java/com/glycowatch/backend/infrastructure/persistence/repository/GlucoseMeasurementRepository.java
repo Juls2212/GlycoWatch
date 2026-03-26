@@ -37,6 +37,8 @@ public interface GlucoseMeasurementRepository extends JpaRepository<GlucoseMeasu
 
     Optional<GlucoseMeasurementEntity> findFirstByUserIdAndIsValidTrueOrderByMeasuredAtDesc(Long userId);
 
+    Optional<GlucoseMeasurementEntity> findByIdAndUserId(Long id, Long userId);
+
     List<GlucoseMeasurementEntity> findTop20ByUserIdAndIsValidTrueOrderByMeasuredAtDesc(Long userId);
 
     @Query("""
