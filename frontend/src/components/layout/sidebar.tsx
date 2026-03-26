@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const navItems = [
-  { href: "/dashboard", label: "Panel" },
-  { href: "/measurements", label: "Mediciones" },
-  { href: "/alerts", label: "Alertas" },
-  { href: "/devices", label: "Dispositivos" },
-  { href: "/profile", label: "Perfil" },
-  { href: "/analytics", label: "Análisis" }
-];
+import { NAV_ITEMS } from "@/components/layout/nav-items";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -26,7 +18,7 @@ export function Sidebar() {
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map((item) => {
+        {NAV_ITEMS.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link key={item.label} href={item.href} className={`nav-link ${active ? "active" : ""}`}>
@@ -38,3 +30,4 @@ export function Sidebar() {
     </aside>
   );
 }
+
